@@ -23,7 +23,7 @@
  * Class responsible for payment PagSeguro.
  */
 include_once 'PagSeguroLibrary/PagSeguroLibrary.php';
-class ControllerPaymentPagSeguro extends Controller
+class ControllerExtensionPaymentPagSeguro extends Controller
 {
 
 	/**
@@ -78,7 +78,7 @@ class ControllerPaymentPagSeguro extends Controller
 		$this->data['action'] = '';
 		$this->data['url_ps'] = '';
 		$this->_action();
-		$this->template = 'default/template/payment/pagseguro.tpl';
+		$this->template = 'default/template/extension/payment/pagseguro.tpl';
 
 		$this->render();
 	}
@@ -89,11 +89,11 @@ class ControllerPaymentPagSeguro extends Controller
 	private function _load()
 	{
 		PagSeguroConfig::activeLog($this->_getDirectoryLog());
-		$this->language->load('payment/pagseguro');
+		$this->language->load('extension/payment/pagseguro');
 		$this->load->model('checkout/order');
 		$this->load->model('setting/setting');
-		$this->load->model('payment/pagseguro');
-		$this->language->load('payment/pagseguro');
+		$this->load->model('extension/payment/pagseguro');
+		$this->language->load('extension/payment/pagseguro');
 	}
 
 	/**

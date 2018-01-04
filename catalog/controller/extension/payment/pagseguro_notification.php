@@ -22,7 +22,7 @@
  * Class Controller Payment PagSeguro Notification
  * Class responsible for receiving and handling of notifications sent by PagSeguro.
  */
-class ControllerPaymentPagSeguroNotification extends Controller
+class ControllerExtensionPaymentPagSeguroNotification extends Controller
 {
 
 	/**
@@ -98,7 +98,7 @@ class ControllerPaymentPagSeguroNotification extends Controller
 	 */
 	private function _load()
 	{
-		$this->load->model('payment/pagseguro');
+		$this->load->model('extension/payment/pagseguro');
 	}
 
 	/**
@@ -106,7 +106,7 @@ class ControllerPaymentPagSeguroNotification extends Controller
 	 */
 	private function _addPagSeguroLibrary()
 	{
-		include_once DIR_APPLICATION . 'controller/payment/PagSeguroLibrary/PagSeguroLibrary.php';
+		include_once DIR_APPLICATION . 'controller/extension/payment/PagSeguroLibrary/PagSeguroLibrary.php';
 	}
 
 	/**

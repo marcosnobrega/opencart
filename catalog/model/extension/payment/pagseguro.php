@@ -22,7 +22,7 @@
  * Model Payment PagSeguro.
  * Model responsible for the searches, changes and updates to the tables of PagSeguro.
  */
-class ModelPaymentPagSeguro extends Model
+class ModelExtensionPaymentPagSeguro extends Model
 {
 
 	private $_languages = array();
@@ -59,7 +59,7 @@ class ModelPaymentPagSeguro extends Model
 	public function getMethod($address, $total)
 	{
 
-		$this->language->load('payment/pagseguro');
+		$this->language->load('extension/payment/pagseguro');
 
 		$method_data = array(
 			'code'		 => 'pagseguro',

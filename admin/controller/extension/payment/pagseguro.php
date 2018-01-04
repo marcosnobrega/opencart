@@ -21,7 +21,7 @@
  * Controller Payment PagSeguro.
  * Class responsible for the configuration data of the user of PagSeguro (adm)
  */
-class ControllerPaymentPagSeguro extends Controller
+class ControllerExtensionPaymentPagSeguro extends Controller
 {
 
 	/**
@@ -46,7 +46,7 @@ class ControllerPaymentPagSeguro extends Controller
 	{
 
 		$this->_addPagSeguroLibrary();
-		$this->language->load('payment/pagseguro');
+		$this->language->load('extension/payment/pagseguro');
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->load->model('setting/setting');
 
@@ -67,7 +67,7 @@ class ControllerPaymentPagSeguro extends Controller
 		$this->_createLink();
 		$this->_createError();
 
-		$this->template = 'payment/pagseguro.tpl';
+		$this->template = 'extension/payment/pagseguro.tpl';
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -81,7 +81,7 @@ class ControllerPaymentPagSeguro extends Controller
 	 */
 	private function _addPagSeguroLibrary()
 	{
-		include_once DIR_CATALOG . 'controller/payment/PagSeguroLibrary/PagSeguroLibrary.php';
+		include_once DIR_CATALOG . 'controller/extension/payment/PagSeguroLibrary/PagSeguroLibrary.php';
 	}
 
 	/**
@@ -213,7 +213,7 @@ class ControllerPaymentPagSeguro extends Controller
 
 		$this->data['breadcrumbs'][] = array(
 			'text'		 => $this->language->get('heading_title'),
-			'href'		 => $this->url->link('payment/pagseguro', 'token=' . $this->session->data['token'], 'SSL'),
+			'href'		 => $this->url->link('extension/payment/pagseguro', 'token=' . $this->session->data['token'], 'SSL'),
 			'separator'	 => ' :: '
 		);
 	}
@@ -223,7 +223,7 @@ class ControllerPaymentPagSeguro extends Controller
 	 */
 	private function _createLink()
 	{
-		$this->data['action'] = $this->url->link('payment/pagseguro', 'token=' . $this->session->data['token'], 'SSL');
+		$this->data['action'] = $this->url->link('extension/payment/pagseguro', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
 	}
 
@@ -273,7 +273,7 @@ class ControllerPaymentPagSeguro extends Controller
 	 */
 	private function _permission()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/pp_standard'))
+		if (!$this->user->hasPermission('modify', 'extension/payment/pp_standard'))
 			$this->error['warning'] = $this->language->get('error_permission');
 	}
 
@@ -403,7 +403,7 @@ class ControllerPaymentPagSeguro extends Controller
 	 */
 	private function _generateNotificationUrl()
 	{
-		return HTTP_CATALOG . "index.php?route=payment/pagseguro_notification";
+		return HTTP_CATALOG . "index.php?route=extension/payment/pagseguro_notification";
 	}
 
 	/**

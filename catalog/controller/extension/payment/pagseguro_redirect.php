@@ -21,7 +21,7 @@
 /**
  * Class Controller Payment PagSeguro Redirect
  */
-class ControllerPaymentPagSeguroRedirect extends Controller
+class ControllerExtensionPaymentPagSeguroRedirect extends Controller
 {
 
 	private $_urlPagSeguro;
