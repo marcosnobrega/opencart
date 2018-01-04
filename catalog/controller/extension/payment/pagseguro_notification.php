@@ -123,7 +123,7 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	 */
 	private function _createArrayOrderStatus()
 	{
-		$this->array_order_status = $this->model_payment_pagseguro->getOrderStatus();
+		$this->array_order_status = $this->model_extension_payment_pagseguro->getOrderStatus();
 	}
 
 	/**
@@ -131,7 +131,7 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	 */
 	private function _createCredentials()
 	{
-		$this->obj_credentials = new PagSeguroAccountCredentials($this->config->get('pagseguro_email'), $this->config->get('pagseguro_token'));
+		$this->obj_credentials = new PagSeguroAccountCredentials($this->config->get('payment_pagseguro_email'), $this->config->get('payment_pagseguro_token'));
 	}
 
 	/**
@@ -167,7 +167,7 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	{
 		$value_array = $this->array_order_status[$this->obj_transaction->getStatus()->getValue()];
 		$id_language = $this->_getIdLanguage();
-		$id_order_status = $this->model_payment_pagseguro->getOrderStatusByName($value_array[$this->code_language], $id_language);
+		$id_order_status = $this->model_extension_payment_pagseguro->getOrderStatusByName($value_array[$this->code_language], $id_language);
 		$this->_updateOrder($id_order_status);
 	}
 
@@ -177,7 +177,7 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	 */
 	private function _getIdLanguage()
 	{
-		return $this->model_payment_pagseguro->_getIdLanguageByCode($this->code_language);
+		return $this->model_extension_payment_pagseguro->_getIdLanguageByCode($this->code_language);
 	}
 
 	/**
@@ -186,8 +186,8 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	 */
 	private function _updateOrder($id_order_status)
 	{
-		$this->model_payment_pagseguro->updateOrder($this->reference, $id_order_status);
-		$this->model_payment_pagseguro->saveOrderHistory($this->reference, $id_order_status);
+		$this->model_extension_payment_pagseguro->updateOrder($this->reference, $id_order_status);
+		$this->model_extension_payment_pagseguro->saveOrderHistory($this->reference, $id_order_status);
 	}
 }
 ?>

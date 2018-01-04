@@ -64,7 +64,7 @@ class ModelExtensionPaymentPagSeguro extends Model
 		$method_data = array(
 			'code'		 => 'pagseguro',
 			'title'		 => $this->language->get('text_title'),
-			'sort_order' => $this->config->get('pagseguro_sort_order')
+			'sort_order' => $this->config->get('payment_pagseguro_sort_order')
 		);
 
 		return $method_data;

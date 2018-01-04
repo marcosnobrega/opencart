@@ -29,29 +29,31 @@
         <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
           <!-- pagseguro_enable_module -->
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="pagseguro_status_enabled"><span data-toggle="tooltip" title="{{ text_module }}">{{ enable_module }}</span></label>
+            <label class="col-sm-2 control-label" for="payment_pagseguro_status"><span data-toggle="tooltip" title="{{ text_module }}">{{ enable_module }}</span></label>
             <div class="col-sm-10">
-              {% if pagseguro_status %}
-                <input type="radio" name="pagseguro_status" id="pagseguro_status_enabled" value="1" checked="checked" /> {{ text_yes }}  
-                <input type="radio" name="pagseguro_status" id="pagseguro_status_disabled" value="" /> {{ text_no }}
-              {% else %}
-                <input type="radio" name="pagseguro_status" id="pagseguro_status_enabled" value="1" /> {{ text_yes }}  
-                <input type="radio" name="pagseguro_status" id="pagseguro_status_disabled" value="" checked="checked"  /> {{ text_no }}
-              {% endif %}
+              <select id="payment_pagseguro_status" name="payment_pagseguro_status" class="form-control">
+                {% if payment_pagseguro_status %}
+                  <option value="0">Desabilitado</option>
+                  <option value="1" selected>Habilitado</option>
+                {% else %}
+                  <option value="0" selected>Desabilitado</option>
+                  <option value="1">Habilitado</option>
+                {% endif %}
+              </select>
             </div>
           </div>
           <!-- pagseguro_sort_order -->
           <div class="form-group">
             <label class="col-sm-2 control-label" for="pagseguro_sort_order"><span data-toggle="tooltip" title="{{ text_order }}">{{ display_order }}</span></label>
             <div class="col-sm-10">
-              <input type="text" name="pagseguro_sort_order" value="{{ pagseguro_sort_order }}" placeholder="{{ pagseguro_sort_order }}" id="pagseguro_sort_order" class="form-control" />
+              <input type="text" name="payment_pagseguro_sort_order" value="{{ pagseguro_sort_order }}" placeholder="{{ pagseguro_sort_order }}" id="pagseguro_sort_order" class="form-control" />
             </div>
           </div>
           <!-- pagseguro_email -->
           <div class="form-group">
             <label class="col-sm-2 control-label" for="pagseguro_email">{{ ps_email }}<br/>{{ text_email }}</label>
             <div class="col-sm-10">
-              <input type="text" name="pagseguro_email" value="{{ pagseguro_email }}" placeholder="{{ pagseguro_email }}" id="pagseguro_email" class="form-control" />
+              <input type="text" name="payment_pagseguro_email" value="{{ pagseguro_email }}" placeholder="{{ pagseguro_email }}" id="pagseguro_email" class="form-control" />
               {% if error_email %}
                   <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> 
                     {{ error_email }}
@@ -64,7 +66,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="pagseguro_token">{{ ps_token }}<br/>{{ text_token }}</label>
             <div class="col-sm-10">
-              <input type="text" name="pagseguro_token" value="{{ pagseguro_token }}" placeholder="{{ pagseguro_token }}" id="pagseguro_token" class="form-control" />
+              <input type="text" name="payment_pagseguro_token" value="{{ pagseguro_token }}" placeholder="{{ pagseguro_token }}" id="pagseguro_token" class="form-control" />
               {% if error_token %}
                   <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> 
                     {{ error_token }}
@@ -79,7 +81,7 @@
               <span data-toggle="tooltip" title="{{ text_environment }}">
               {{ ps_environment }}</span></label>
             <div class="col-sm-10">
-              <select id="pagseguro_environment" name="pagseguro_environment" class="form-control">
+              <select id="pagseguro_environment" name="payment_pagseguro_environment" class="form-control">
                 {% if pagseguro_environment == 'production' %}
                   <option value="production" selected>Produção</option>
                   <option value="sandbox">Sandbox</option>
@@ -92,10 +94,10 @@
           </div>
           <!-- pagseguro_checkout -->
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="pagseguro_checkout">
+            <label class="col-sm-2 control-label" for="pagseguro_checkouts">
               {{ ps_checkout }}</label>
             <div class="col-sm-10">
-              <select id="pagseguro_checkout" name="pagseguro_checkout" class="form-control">
+              <select id="pagseguro_checkouts" name="payment_pagseguro_checkout" class="form-control">
                 {% if pagseguro_environment == 'lightbox' %}
                   <option value="padrao">Padrão</option>
                   <option value="lightbox" selected>Lightbox</option>
@@ -112,14 +114,14 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="pagseguro_forwarding">{{ url_forwarding }}<br/>{{ text_url_forwarding }}</label>
             <div class="col-sm-10">
-              <input type="text" name="pagseguro_forwarding" value="{{ pagseguro_forwarding }}" placeholder="{{ pagseguro_forwarding }}" id="pagseguro_forwarding" class="form-control" />
+              <input type="text" name="payment_pagseguro_forwarding" value="{{ pagseguro_forwarding }}" placeholder="{{ pagseguro_forwarding }}" id="pagseguro_forwarding" class="form-control" />
             </div>
           </div>
           <!-- pagseguro_url_notification -->
           <div class="form-group">
             <label class="col-sm-2 control-label" for="pagseguro_url_notification"><span data-toggle="tooltip" title="{{ text_url_notification }}">{{ url_notification }}</span></label>
             <div class="col-sm-10">
-              <input type="text" name="pagseguro_url_notification" value="{{ pagseguro_url_notification }}" placeholder="{{ pagseguro_url_notification }}" id="pagseguro_url_notification" class="form-control" />
+              <input type="text" name="payment_pagseguro_url_notification" value="{{ pagseguro_url_notification }}" placeholder="{{ pagseguro_url_notification }}" id="pagseguro_url_notification" class="form-control" />
             </div>
           </div>
           <!-- charset -->
@@ -127,11 +129,11 @@
             <label class="col-sm-2 control-label" for="pagseguro_charset_active"><span data-toggle="tooltip" title="{{ text_charset }}">{{ charset }}</span></label>
             <div class="col-sm-10">
               {% if pagseguro_charset %}
-                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_active" value="1" checked="checked" /> {{ iso }}
-                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_inactive" value="" /> {{ utf }}
+                <input type="radio" name="payment_pagseguro_charset" id="pagseguro_charset_active" value="1" checked="checked" /> {{ iso }}
+                <input type="radio" name="payment_pagseguro_charset" id="pagseguro_charset_inactive" value="" /> {{ utf }}
               {% else %}
-                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_active" value="1"  /> {{ iso }}
-                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_inactive" value="" checked="checked" /> {{ utf }}
+                <input type="radio" name="payment_pagseguro_charset" id="pagseguro_charset_active" value="1"  /> {{ iso }}
+                <input type="radio" name="payment_pagseguro_charset" id="pagseguro_charset_inactive" value="" checked="checked" /> {{ utf }}
               {% endif %}
             </div>
           </div>
@@ -140,11 +142,11 @@
             <label class="col-sm-2 control-label" for="pagseguro_log_active"><span data-toggle="tooltip" title="{{ text_log }}">{{ log }}</span></label>
             <div class="col-sm-10">
               {% if pagseguro_log %}
-                <input type="radio" name="pagseguro_log" id="pagseguro_log_active" value="1" checked="checked" /> {{ text_yes }}
-                <input type="radio" name="pagseguro_log" id="pagseguro_log_inactive" value=""  /> {{ text_no }}
+                <input type="radio" name="payment_pagseguro_log" id="pagseguro_log_active" value="1" checked="checked" /> {{ text_yes }}
+                <input type="radio" name="payment_pagseguro_log" id="pagseguro_log_inactive" value=""  /> {{ text_no }}
               {% else %}
-                <input type="radio" name="pagseguro_log" id="pagseguro_log_active" value="1" /> {{ text_yes }}
-                <input type="radio" name="pagseguro_log" id="pagseguro_log_inactive" value=""  checked="checked"/> {{ text_no }}
+                <input type="radio" name="payment_pagseguro_log" id="pagseguro_log_active" value="1" /> {{ text_yes }}
+                <input type="radio" name="payment_pagseguro_log" id="pagseguro_log_inactive" value=""  checked="checked"/> {{ text_no }}
               {% endif %}
             </div>
           </div>
@@ -152,7 +154,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="pagseguro_directory"><span data-toggle="tooltip" title="{{ text_directory }}">{{ directory }}</span></label>
             <div class="col-sm-10">
-              <input type="text" name="pagseguro_directory" value="{{ pagseguro_directory }}" placeholder="{{ pagseguro_directory }}" id="pagseguro_directory" class="form-control" />
+              <input type="text" name="payment_pagseguro_directory" value="{{ pagseguro_directory }}" placeholder="{{ pagseguro_directory }}" id="pagseguro_directory" class="form-control" />
             </div>
           </div>
 

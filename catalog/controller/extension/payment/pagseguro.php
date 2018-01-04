@@ -59,7 +59,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	/**
 	 * The first method to be called by the payment PagSeguro treatment.
 	 */
-	protected function index()
+	public function index()
 	{
 
 		$this->_load();
@@ -74,13 +74,13 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 		$this->_performPagSeguroRequest($this->_pagSeguroPaymentRequestObject);
 		$this->_updateOrderStatus();
 
-		$this->data['button_confirm'] = $this->language->get('button_confirm');
-		$this->data['action'] = '';
-		$this->data['url_ps'] = '';
+		$this->tplData['button_confirm'] = $this->language->get('button_confirm');
+		$this->tplData['action'] = '';
+		$this->tplData['url_ps'] = '';
 		$this->_action();
-		$this->template = 'default/template/extension/payment/pagseguro.tpl';
+		$this->template = 'default/template/extension/payment/pagseguro';
 
-		$this->render();
+		return $this->load->view($this->template, $this->tplData);
 	}
 
 	/**
@@ -157,8 +157,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _getPagSeguroRedirectUrl()
 	{
 
-		if ($this->_isNotNull($this->config->get('pagseguro_forwarding')))
-			return $this->config->get('pagseguro_forwarding');
+		if ($this->_isNotNull($this->config->get('payment_pagseguro_forwarding')))
+			return $this->config->get('payment_pagseguro_forwarding');
 
 		return HTTPS_SERVER . "index.php?route=checkout/success";
 
@@ -171,8 +171,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _getPagSeguroNotificationURL()
 	{
 
-		if ($this->_isNotNull($this->config->get('pagseguro_url_notification')))
-			return $this->config->get('pagseguro_url_notification');
+		if ($this->_isNotNull($this->config->get('payment_pagseguro_url_notification')))
+			return $this->config->get('payment_pagseguro_url_notification');
 
 		return HTTPS_SERVER . "index.php?route=payment/pagseguro_notification";
 	}
@@ -284,11 +284,17 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _performPagSeguroRequest(PagSeguroPaymentRequest $paymentRequest)
 	{
-		$this->_credential = new PagSeguroAccountCredentials($this->config->get('pagseguro_email'), $this->config->get('pagseguro_token'));
+		PagSeguroConfig::setEnvironment($this->config->get('payment_pagseguro_environment'));
+
+		$this->_credential = new PagSeguroAccountCredentials($this->config->get('payment_pagseguro_email'), $this->config->get('payment_pagseguro_token'));
 
 		try
 		{
-			$this->_urlPagSeguro = $paymentRequest->register($this->_credential);
+			if($this->_isLightboxCheckoutType()) {
+                $this->_urlPagSeguro = $paymentRequest->register($this->_credential, $this->_isLightboxCheckoutType());
+            }else{
+                $this->_urlPagSeguro = $paymentRequest->register($this->_credential);
+			}
 		}
 		catch (Exception $exc)
 		{
@@ -301,7 +307,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _generatePagSeguroOrderStatus()
 	{
-		$this->model_payment_pagseguro->savePagSeguroOrderStatus();
+		$this->model_extension_payment_pagseguro->savePagSeguroOrderStatus();
 	}
 
 	/**
@@ -311,13 +317,13 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	{
 
 		$id_language = (int) $this->_order_info['language_id'];
-		$code_language = $this->model_payment_pagseguro->getCodeLanguageById($id_language);
-		$array_language = $this->model_payment_pagseguro->getOrderStatus();
+		$code_language = $this->model_extension_payment_pagseguro->getCodeLanguageById($id_language);
+		$array_language = $this->model_extension_payment_pagseguro->getOrderStatus();
 		$array_language = $array_language['1'];
 		$wating_payment = $array_language[$code_language];
 
-		$id_order_status = $this->model_payment_pagseguro->getOrderStatusByName($wating_payment, $id_language);
-		$this->model_payment_pagseguro->updateOrder($this->_order_info['order_id'], $id_order_status);
+		$id_order_status = $this->model_extension_payment_pagseguro->getOrderStatusByName($wating_payment, $id_language);
+		$this->model_extension_payment_pagseguro->updateOrder($this->_order_info['order_id'], $id_order_status);
 	}
 	/**
 	 * Link for redirect PagSeguro
@@ -326,8 +332,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	{
 
 		if (!empty($this->_urlPagSeguro )) {
-			$this->data['action'] = HTTP_SERVER . "index.php?route=payment/pagseguro_redirect";
-			$this->data['url_ps'] = $this->_urlPagSeguro;
+			$this->tplData['action'] = HTTP_SERVER . "index.php?route=extension/payment/pagseguro_redirect";
+			$this->tplData['url_ps'] = $this->_urlPagSeguro;
 		}
 	}
 
@@ -351,7 +357,18 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _getDirectoryLog()
 	{
 		$_dir = str_replace('catalog/', '', DIR_APPLICATION);
-		return ($this->_isNotNull($this->config->get('pagseguro_directory')) == TRUE) ? $_dir . $this->config->get('pagseguro_directory') : null;
+		return ($this->_isNotNull($this->config->get('payment_pagseguro_directory')) == TRUE) ? $_dir . $this->config->get('payment_pagseguro_directory') : null;
+	}
+
+	/**
+     * @return string
+     */
+    private function _isLightboxCheckoutType(){
+        if ($this->config->get('payment_pagseguro_checkout') == 'lightbox'){
+        	return true;
+		}else{
+        	return false;
+		}
 	}
 }
 ?>

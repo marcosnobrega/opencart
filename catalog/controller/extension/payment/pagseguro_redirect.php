@@ -32,8 +32,36 @@ class ControllerExtensionPaymentPagSeguroRedirect extends Controller
 	public function index()
 	{
 
-		if ($_POST)
-			$this->_redirect();
+		if ($_POST) {
+            if ($this->config->get('payment_pagseguro_checkout') == 'lightbox') {
+                $this->tplData['breadcrumbs'] = array();
+
+                $this->tplData['breadcrumbs'][] = array(
+                    'text'      => $this->language->get('text_home'),
+                    'href'      => $this->url->link('common/home'),
+                    'separator' => false
+                );
+
+                $this->tplData['breadcrumbs'][] = array(
+                    'text'      => 'Checkout',
+                    'href'      => $this->url->link('information/static'),
+                    'separator' => $this->language->get('text_separator')
+                );
+
+                $this->template = 'default/template/extension/payment/pagseguro_lightbox';
+    			$this->tplData['column_left'] = $this->load->controller('common/column_left');
+    			$this->tplData['column_right'] = $this->load->controller('common/column_right');
+    			$this->tplData['header'] = $this->load->controller('common/header');
+    			$this->tplData['footer'] = $this->load->controller('common/footer');
+    			$this->tplData['content_top'] = $this->load->controller('common/content_top');
+    			$this->tplData['content_bottom'] = $this->load->controller('common/content_bottom');
+
+                $this->tplData['code'] = '';
+                $this->tplData['environment'] = '';
+            }
+            $this->_redirect();
+        }
+        $this->response->setOutput($this->load->view($this->template, $this->tplData));
 	}
 
 	/**
@@ -45,8 +73,16 @@ class ControllerExtensionPaymentPagSeguroRedirect extends Controller
 		$this->_urlPagSeguro = $this->request->post['url_ps'];
 
 		if (!empty($this->_urlPagSeguro )) {
-			header('Location: ' . $this->_urlPagSeguro);
-			$this->cart->clear();
+		    if($this->config->get('payment_pagseguro_checkout') == 'lightbox'){
+		        $this->tplData['code'] = $this->_urlPagSeguro;
+		        $this->tplData['environment'] = $this->config->get('payment_pagseguro_environment');
+
+                $this->cart->clear();
+            }else{
+                header('Location: ' . $this->_urlPagSeguro);
+                $this->cart->clear();
+            }
+
 		}
 	}
 }

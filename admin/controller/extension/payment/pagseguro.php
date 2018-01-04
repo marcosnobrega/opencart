@@ -53,10 +53,10 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('pagseguro', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_pagseguro', $this->request->post);
 			$this->session->data['success'] = $this->language->get('text_success');
 			$this->_setPagSeguroConfiguration();
-			$this->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], 'SSL'));
+			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', 'SSL'));
 		}
 
 		$this->tplData['heading_title'] = $this->language->get('heading_title');
@@ -91,60 +91,60 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _createInput()
 	{
 
-		if (isset($this->request->post['pagseguro_status']))
-			$this->tplData['pagseguro_status'] = $this->request->post['pagseguro_status'];
+		if (isset($this->request->post['payment_pagseguro_status']))
+			$this->tplData['payment_pagseguro_status'] = $this->request->post['payment_pagseguro_status'];
 		else
-			$this->tplData['pagseguro_status'] = $this->config->get('pagseguro_status');
+			$this->tplData['payment_pagseguro_status'] = $this->config->get('payment_pagseguro_status');
 
-		if (isset($this->request->post['pagseguro_sort_order']))
-			$this->tplData['pagseguro_sort_order'] = $this->request->post['pagseguro_sort_order'];
+		if (isset($this->request->post['payment_pagseguro_sort_order']))
+			$this->tplData['pagseguro_sort_order'] = $this->request->post['payment_pagseguro_sort_order'];
 		else
-			$this->tplData['pagseguro_sort_order'] = $this->config->get('pagseguro_sort_order');
+			$this->tplData['pagseguro_sort_order'] = $this->config->get('payment_pagseguro_sort_order');
 
-		if (isset($this->request->post['pagseguro_email']))
-			$this->tplData['pagseguro_email'] = $this->request->post['pagseguro_email'];
+		if (isset($this->request->post['payment_pagseguro_email']))
+			$this->tplData['pagseguro_email'] = $this->request->post['payment_pagseguro_email'];
 		else
-			$this->tplData['pagseguro_email'] = $this->config->get('pagseguro_email');
+			$this->tplData['pagseguro_email'] = $this->config->get('payment_pagseguro_email');
 
-		if (isset($this->request->post['pagseguro_token']))
-			$this->tplData['pagseguro_token'] = $this->request->post['pagseguro_token'];
+		if (isset($this->request->post['payment_pagseguro_token']))
+			$this->tplData['pagseguro_token'] = $this->request->post['payment_pagseguro_token'];
 		else
-			$this->tplData['pagseguro_token'] = $this->config->get('pagseguro_token');
+			$this->tplData['pagseguro_token'] = $this->config->get('payment_pagseguro_token');
 
-		if (isset($this->request->post['pagseguro_environment']))
-            $this->tplData['pagseguro_environment'] = $this->request->post['pagseguro_environment'];
+		if (isset($this->request->post['payment_pagseguro_environment']))
+            $this->tplData['pagseguro_environment'] = $this->request->post['payment_pagseguro_environment'];
         else
-            $this->tplData['pagseguro_environment'] = $this->config->get('pagseguro_environment');
+            $this->tplData['pagseguro_environment'] = $this->config->get('payment_pagseguro_environment');
 
-        if (isset($this->request->post['pagseguro_checkout']))
-            $this->tplData['pagseguro_checkout'] = $this->request->post['pagseguro_checkout'];
+        if (isset($this->request->post['payment_pagseguro_checkout']))
+            $this->tplData['pagseguro_checkout'] = $this->request->post['payment_pagseguro_checkout'];
         else
-            $this->tplData['pagseguro_checkout'] = $this->config->get('pagseguro_checkout');
+            $this->tplData['pagseguro_checkout'] = $this->config->get('payment_pagseguro_checkout');
 
-		if (isset($this->request->post['pagseguro_forwarding']))
-			$this->tplData['pagseguro_forwarding'] = $this->request->post['pagseguro_forwarding'];
+		if (isset($this->request->post['payment_pagseguro_forwarding']))
+			$this->tplData['pagseguro_forwarding'] = $this->request->post['payment_pagseguro_forwarding'];
 		else
 			$this->tplData['pagseguro_forwarding'] = $this->validateRedirectUrl();
 
-		if (isset($this->request->post['pagseguro_url_notification']))
-			$this->tplData['pagseguro_url_notification'] = $this->request->post['pagseguro_url_notification'];
+		if (isset($this->request->post['payment_pagseguro_url_notification']))
+			$this->tplData['pagseguro_url_notification'] = $this->request->post['payment_pagseguro_url_notification'];
 		else
 			$this->tplData['pagseguro_url_notification'] = $this->validateNotificationUrl();
 
-		if (isset($this->request->post['pagseguro_charset']))
-			$this->tplData['pagseguro_charset'] = $this->request->post['pagseguro_charset'];
+		if (isset($this->request->post['payment_pagseguro_charset']))
+			$this->tplData['pagseguro_charset'] = $this->request->post['payment_pagseguro_charset'];
 		else
-			$this->tplData['pagseguro_charset'] = $this->config->get('pagseguro_charset');
+			$this->tplData['pagseguro_charset'] = $this->config->get('payment_pagseguro_charset');
 
-		if (isset($this->request->post['pagseguro_log']))
-			$this->tplData['pagseguro_log'] = $this->request->post['pagseguro_log'];
+		if (isset($this->request->post['payment_pagseguro_log']))
+			$this->tplData['pagseguro_log'] = $this->request->post['payment_pagseguro_log'];
 		else
-			$this->tplData['pagseguro_log'] = $this->config->get('pagseguro_log');
+			$this->tplData['pagseguro_log'] = $this->config->get('payment_pagseguro_log');
 
-		if (isset($this->request->post['pagseguro_directory']))
-			$this->tplData['pagseguro_directory'] = $this->request->post['pagseguro_directory'];
+		if (isset($this->request->post['payment_pagseguro_directory']))
+			$this->tplData['pagseguro_directory'] = $this->request->post['payment_pagseguro_directory'];
 		else
-			$this->tplData['pagseguro_directory'] = $this->config->get('pagseguro_directory');
+			$this->tplData['pagseguro_directory'] = $this->config->get('payment_pagseguro_directory');
 	}
 
 	/**
@@ -301,11 +301,11 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _validateEmail()
 	{
 
-		if (empty($this->request->post['pagseguro_email']))
+		if (empty($this->request->post['payment_pagseguro_email']))
 			$this->error['email'] = $this->language->get('error_email_required');
 
-		if (!empty($this->request->post['pagseguro_email'])) {
-			$valid = preg_match($this->pattern, $this->request->post['pagseguro_email']);
+		if (!empty($this->request->post['payment_pagseguro_email'])) {
+			$valid = preg_match($this->pattern, $this->request->post['payment_pagseguro_email']);
 
 			if ($valid != 1) {
 				$this->error['email'] = $this->language->get('error_email_invalid');
@@ -319,10 +319,10 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _validateToken()
 	{
 
-		if (empty($this->request->post['pagseguro_token']))
+		if (empty($this->request->post['payment_pagseguro_token']))
 			$this->error['token'] = $this->language->get('error_token_required');
 
-		if (strlen(trim($this->request->post['pagseguro_token'])) != 32 && !(empty($this->request->post['pagseguro_token'])))
+		if (strlen(trim($this->request->post['payment_pagseguro_token'])) != 32 && !(empty($this->request->post['payment_pagseguro_token'])))
 			$this->error['token'] = $this->language->get('error_token_invalid');
 	}
 
@@ -331,12 +331,12 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _setPagSeguroConfiguration()
 	{
-		$charset = ($this->request->post['pagseguro_charset'] == 1) ? $this->language->get('iso') : $this->language->get('utf');
+		$charset = ($this->request->post['payment_pagseguro_charset'] == 1) ? $this->language->get('iso') : $this->language->get('utf');
 
 		// setting configurated default charset
 		PagSeguroConfig::setApplicationCharset($charset);
 
-		$activeLog = ($this->request->post['pagseguro_log'] == 1) ? TRUE : FALSE;
+		$activeLog = ($this->request->post['payment_pagseguro_log'] == 1) ? TRUE : FALSE;
 
 		// setting configurated default log info
 		if ($activeLog) {
@@ -372,7 +372,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function validateNotificationUrl()
 	{
 
-		$value = $this->config->get('pagseguro_url_notification');
+		$value = $this->config->get('payment_pagseguro_url_notification');
 
 		if (empty($value))
 			return $this->_generateNotificationUrl();
@@ -387,7 +387,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function validateRedirectUrl()
 	{
 
-		$value = $this->config->get('pagseguro_forwarding');
+		$value = $this->config->get('payment_pagseguro_forwarding');
 
 		if (empty($value))
 			return $this->_generationRedirectUrl();
@@ -401,7 +401,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _notificationUrl()
 	{
 
-		if (empty($this->request->post['pagseguro_url_notification']))
+		if (empty($this->request->post['payment_pagseguro_url_notification']))
 			$this->tplData['pagseguro_url_notification'] = $this->_generateNotificationUrl();
 	}
 
@@ -411,7 +411,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _redirectUrl()
 	{
 
-		if (empty($this->request->post['pagseguro_forwarding']))
+		if (empty($this->request->post['payment_pagseguro_forwarding']))
 			$this->tplData['pagseguro_forwarding'] = $this->_generationRedirectUrl();
 	}
 
@@ -456,8 +456,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 		$directory = NULL;
 		$validate_extension = FALSE;
 
-		if ($this->_isNotNull($this->request->post['pagseguro_directory'])) {
-			$directory = $this->request->post['pagseguro_directory'];
+		if ($this->_isNotNull($this->request->post['payment_pagseguro_directory'])) {
+			$directory = $this->request->post['payment_pagseguro_directory'];
 
 			foreach ($this->array_extension as $extension) {
 				if (stripos($directory, $extension))
