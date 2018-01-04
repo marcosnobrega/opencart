@@ -1,0 +1,164 @@
+{{ header }}
+<script type="text/javascript" src="view/javascript/jquery/pagseguromodule.js"></script>
+{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1><img src="view/image/payment/ps-logo.png" alt=""/> {{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ heading_title }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+          <!-- pagseguro_enable_module -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_status_enabled"><span data-toggle="tooltip" title="{{ text_module }}">{{ enable_module }}</span></label>
+            <div class="col-sm-10">
+              {% if pagseguro_status %}
+                <input type="radio" name="pagseguro_status" id="pagseguro_status_enabled" value="1" checked="checked" /> {{ text_yes }}  
+                <input type="radio" name="pagseguro_status" id="pagseguro_status_disabled" value="" /> {{ text_no }}
+              {% else %}
+                <input type="radio" name="pagseguro_status" id="pagseguro_status_enabled" value="1" /> {{ text_yes }}  
+                <input type="radio" name="pagseguro_status" id="pagseguro_status_disabled" value="" checked="checked"  /> {{ text_no }}
+              {% endif %}
+            </div>
+          </div>
+          <!-- pagseguro_sort_order -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_sort_order"><span data-toggle="tooltip" title="{{ text_order }}">{{ display_order }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="pagseguro_sort_order" value="{{ pagseguro_sort_order }}" placeholder="{{ pagseguro_sort_order }}" id="pagseguro_sort_order" class="form-control" />
+            </div>
+          </div>
+          <!-- pagseguro_email -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_email">{{ ps_email }}<br/>{{ text_email }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="pagseguro_email" value="{{ pagseguro_email }}" placeholder="{{ pagseguro_email }}" id="pagseguro_email" class="form-control" />
+              {% if error_email %}
+                  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> 
+                    {{ error_email }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  </div>
+              {% endif %}
+            </div>
+          </div>
+          <!-- pagseguro_token -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_token">{{ ps_token }}<br/>{{ text_token }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="pagseguro_token" value="{{ pagseguro_token }}" placeholder="{{ pagseguro_token }}" id="pagseguro_token" class="form-control" />
+              {% if error_token %}
+                  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> 
+                    {{ error_token }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  </div>
+              {% endif %}
+            </div>
+          </div>
+          <!-- pagseguro_environment -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_environment">
+              <span data-toggle="tooltip" title="{{ text_environment }}">
+              {{ ps_environment }}</span></label>
+            <div class="col-sm-10">
+              <select id="pagseguro_environment" name="pagseguro_environment" class="form-control">
+                {% if pagseguro_environment == 'production' %}
+                  <option value="production" selected>Produção</option>
+                  <option value="sandbox">Sandbox</option>
+                {% else %}
+                  <option value="sandbox" selected>Sandbox</option>
+                  <option value="production">Produção</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <!-- pagseguro_checkout -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_checkout">
+              {{ ps_checkout }}</label>
+            <div class="col-sm-10">
+              <select id="pagseguro_checkout" name="pagseguro_checkout" class="form-control">
+                {% if pagseguro_environment == 'lightbox' %}
+                  <option value="padrao">Padrão</option>
+                  <option value="lightbox" selected>Lightbox</option>
+                {% else %}
+                  <option value="padrao" selected>Padrão</option>
+                  <option value="lightbox">Lightbox</option>
+                {% endif %}
+              </select>
+              <p id="pagseguro_option_lightbox_hint"> {{ text_checkoutLightbox }} </p>
+              <p id="pagseguro_option_padrao_hint"> {{ text_checkoutPadrao }} </p>
+            </div>
+          </div>
+          <!-- pagseguro_forwarding -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_forwarding">{{ url_forwarding }}<br/>{{ text_url_forwarding }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="pagseguro_forwarding" value="{{ pagseguro_forwarding }}" placeholder="{{ pagseguro_forwarding }}" id="pagseguro_forwarding" class="form-control" />
+            </div>
+          </div>
+          <!-- pagseguro_url_notification -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_url_notification"><span data-toggle="tooltip" title="{{ text_url_notification }}">{{ url_notification }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="pagseguro_url_notification" value="{{ pagseguro_url_notification }}" placeholder="{{ pagseguro_url_notification }}" id="pagseguro_url_notification" class="form-control" />
+            </div>
+          </div>
+          <!-- charset -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_charset_active"><span data-toggle="tooltip" title="{{ text_charset }}">{{ charset }}</span></label>
+            <div class="col-sm-10">
+              {% if pagseguro_charset %}
+                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_active" value="1" checked="checked" /> {{ iso }}
+                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_inactive" value="" /> {{ utf }}
+              {% else %}
+                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_active" value="1"  /> {{ iso }}
+                <input type="radio" name="pagseguro_charset" id="pagseguro_charset_inactive" value="" checked="checked" /> {{ utf }}
+              {% endif %}
+            </div>
+          </div>
+          <!-- log -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_log_active"><span data-toggle="tooltip" title="{{ text_log }}">{{ log }}</span></label>
+            <div class="col-sm-10">
+              {% if pagseguro_log %}
+                <input type="radio" name="pagseguro_log" id="pagseguro_log_active" value="1" checked="checked" /> {{ text_yes }}
+                <input type="radio" name="pagseguro_log" id="pagseguro_log_inactive" value=""  /> {{ text_no }}
+              {% else %}
+                <input type="radio" name="pagseguro_log" id="pagseguro_log_active" value="1" /> {{ text_yes }}
+                <input type="radio" name="pagseguro_log" id="pagseguro_log_inactive" value=""  checked="checked"/> {{ text_no }}
+              {% endif %}
+            </div>
+          </div>
+          <!-- pagseguro_directory -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="pagseguro_directory"><span data-toggle="tooltip" title="{{ text_directory }}">{{ directory }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="pagseguro_directory" value="{{ pagseguro_directory }}" placeholder="{{ pagseguro_directory }}" id="pagseguro_directory" class="form-control" />
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }} 

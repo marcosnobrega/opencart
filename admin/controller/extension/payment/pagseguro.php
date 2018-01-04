@@ -42,6 +42,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private $array_extension = array(".txt", ".log");
 
+	private $tplData = array();
+
 	public function index()
 	{
 
@@ -54,10 +56,10 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 			$this->model_setting_setting->editSetting('pagseguro', $this->request->post);
 			$this->session->data['success'] = $this->language->get('text_success');
 			$this->_setPagSeguroConfiguration();
-			$this->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], 'SSL'));
 		}
 
-		$this->data['heading_title'] = $this->language->get('heading_title');
+		$this->tplData['heading_title'] = $this->language->get('heading_title');
 
 		$this->_createInput();
 		$this->_createText();
@@ -67,13 +69,12 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 		$this->_createLink();
 		$this->_createError();
 
-		$this->template = 'extension/payment/pagseguro.tpl';
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$this->template = 'extension/payment/pagseguro';
+		$this->tplData['header'] = $this->load->controller('common/header');
+        $this->tplData['column_left'] = $this->load->controller('common/column_left');
+        $this->tplData['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->load->view($this->template, $this->tplData));
 	}
 
 	/**
@@ -91,49 +92,59 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	{
 
 		if (isset($this->request->post['pagseguro_status']))
-			$this->data['pagseguro_status'] = $this->request->post['pagseguro_status'];
+			$this->tplData['pagseguro_status'] = $this->request->post['pagseguro_status'];
 		else
-			$this->data['pagseguro_status'] = $this->config->get('pagseguro_status');
+			$this->tplData['pagseguro_status'] = $this->config->get('pagseguro_status');
 
 		if (isset($this->request->post['pagseguro_sort_order']))
-			$this->data['pagseguro_sort_order'] = $this->request->post['pagseguro_sort_order'];
+			$this->tplData['pagseguro_sort_order'] = $this->request->post['pagseguro_sort_order'];
 		else
-			$this->data['pagseguro_sort_order'] = $this->config->get('pagseguro_sort_order');
+			$this->tplData['pagseguro_sort_order'] = $this->config->get('pagseguro_sort_order');
 
 		if (isset($this->request->post['pagseguro_email']))
-			$this->data['pagseguro_email'] = $this->request->post['pagseguro_email'];
+			$this->tplData['pagseguro_email'] = $this->request->post['pagseguro_email'];
 		else
-			$this->data['pagseguro_email'] = $this->config->get('pagseguro_email');
+			$this->tplData['pagseguro_email'] = $this->config->get('pagseguro_email');
 
 		if (isset($this->request->post['pagseguro_token']))
-			$this->data['pagseguro_token'] = $this->request->post['pagseguro_token'];
+			$this->tplData['pagseguro_token'] = $this->request->post['pagseguro_token'];
 		else
-			$this->data['pagseguro_token'] = $this->config->get('pagseguro_token');
+			$this->tplData['pagseguro_token'] = $this->config->get('pagseguro_token');
+
+		if (isset($this->request->post['pagseguro_environment']))
+            $this->tplData['pagseguro_environment'] = $this->request->post['pagseguro_environment'];
+        else
+            $this->tplData['pagseguro_environment'] = $this->config->get('pagseguro_environment');
+
+        if (isset($this->request->post['pagseguro_checkout']))
+            $this->tplData['pagseguro_checkout'] = $this->request->post['pagseguro_checkout'];
+        else
+            $this->tplData['pagseguro_checkout'] = $this->config->get('pagseguro_checkout');
 
 		if (isset($this->request->post['pagseguro_forwarding']))
-			$this->data['pagseguro_forwarding'] = $this->request->post['pagseguro_forwarding'];
+			$this->tplData['pagseguro_forwarding'] = $this->request->post['pagseguro_forwarding'];
 		else
-			$this->data['pagseguro_forwarding'] = $this->validateRedirectUrl();
+			$this->tplData['pagseguro_forwarding'] = $this->validateRedirectUrl();
 
 		if (isset($this->request->post['pagseguro_url_notification']))
-			$this->data['pagseguro_url_notification'] = $this->request->post['pagseguro_url_notification'];
+			$this->tplData['pagseguro_url_notification'] = $this->request->post['pagseguro_url_notification'];
 		else
-			$this->data['pagseguro_url_notification'] = $this->validateNotificationUrl();
+			$this->tplData['pagseguro_url_notification'] = $this->validateNotificationUrl();
 
 		if (isset($this->request->post['pagseguro_charset']))
-			$this->data['pagseguro_charset'] = $this->request->post['pagseguro_charset'];
+			$this->tplData['pagseguro_charset'] = $this->request->post['pagseguro_charset'];
 		else
-			$this->data['pagseguro_charset'] = $this->config->get('pagseguro_charset');
+			$this->tplData['pagseguro_charset'] = $this->config->get('pagseguro_charset');
 
 		if (isset($this->request->post['pagseguro_log']))
-			$this->data['pagseguro_log'] = $this->request->post['pagseguro_log'];
+			$this->tplData['pagseguro_log'] = $this->request->post['pagseguro_log'];
 		else
-			$this->data['pagseguro_log'] = $this->config->get('pagseguro_log');
+			$this->tplData['pagseguro_log'] = $this->config->get('pagseguro_log');
 
 		if (isset($this->request->post['pagseguro_directory']))
-			$this->data['pagseguro_directory'] = $this->request->post['pagseguro_directory'];
+			$this->tplData['pagseguro_directory'] = $this->request->post['pagseguro_directory'];
 		else
-			$this->data['pagseguro_directory'] = $this->config->get('pagseguro_directory');
+			$this->tplData['pagseguro_directory'] = $this->config->get('pagseguro_directory');
 	}
 
 	/**
@@ -142,32 +153,39 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _createText()
 	{
 
-		$this->data['enable_module'] = $this->language->get('enable_module');
-		$this->data['text_module'] = $this->language->get('text_module');
+		$this->tplData['enable_module'] = $this->language->get('enable_module');
+		$this->tplData['text_module'] = $this->language->get('text_module');
 
-		$this->data['display_order'] = $this->language->get('display_order');
-		$this->data['text_order'] = $this->language->get('text_order');
+		$this->tplData['display_order'] = $this->language->get('display_order');
+		$this->tplData['text_order'] = $this->language->get('text_order');
 
-		$this->data['ps_email'] = $this->language->get('ps_email');
-		$this->data['text_email'] = $this->language->get('text_email');
+		$this->tplData['ps_email'] = $this->language->get('ps_email');
+		$this->tplData['text_email'] = $this->language->get('text_email');
 
-		$this->data['ps_token'] = $this->language->get('ps_token');
-		$this->data['text_token'] = $this->language->get('text_token');
+		$this->tplData['ps_token'] = $this->language->get('ps_token');
+		$this->tplData['text_token'] = $this->language->get('text_token');
 
-		$this->data['url_forwarding'] = $this->language->get('url_forwarding');
-		$this->data['text_url_forwarding'] = $this->language->get('text_url_forwarding');
+		$this->tplData['ps_environment'] = $this->language->get('ps_environment');
+        $this->tplData['text_environment'] = $this->language->get('text_environment');
 
-		$this->data['url_notification'] = $this->language->get('url_notification');
-		$this->data['text_url_notification'] = $this->language->get('text_url_notification');
+        $this->tplData['ps_checkout'] = $this->language->get('ps_checkout');
+        $this->tplData['text_checkoutPadrao'] = $this->language->get('text_checkoutPadrao');
+        $this->tplData['text_checkoutLightbox'] = $this->language->get('text_checkoutLightbox');
 
-		$this->data['charset'] = $this->language->get('charset');
-		$this->data['text_charset'] = $this->language->get('text_charset');
+		$this->tplData['url_forwarding'] = $this->language->get('url_forwarding');
+		$this->tplData['text_url_forwarding'] = $this->language->get('text_url_forwarding');
 
-		$this->data['log'] = $this->language->get('log');
-		$this->data['text_log'] = $this->language->get('text_log');
+		$this->tplData['url_notification'] = $this->language->get('url_notification');
+		$this->tplData['text_url_notification'] = $this->language->get('text_url_notification');
 
-		$this->data['directory'] = $this->language->get('directory');
-		$this->data['text_directory'] = $this->language->get('text_directory');
+		$this->tplData['charset'] = $this->language->get('charset');
+		$this->tplData['text_charset'] = $this->language->get('text_charset');
+
+		$this->tplData['log'] = $this->language->get('log');
+		$this->tplData['text_log'] = $this->language->get('text_log');
+
+		$this->tplData['directory'] = $this->language->get('directory');
+		$this->tplData['text_directory'] = $this->language->get('text_directory');
 	}
 
 	/**
@@ -175,11 +193,11 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _createRadio()
 	{
-		$this->data['text_yes'] = $this->language->get('text_yes');
-		$this->data['text_no'] = $this->language->get('text_no');
+		$this->tplData['text_yes'] = $this->language->get('text_yes');
+		$this->tplData['text_no'] = $this->language->get('text_no');
 
-		$this->data['iso'] = $this->language->get('iso');
-		$this->data['utf'] = $this->language->get('utf');
+		$this->tplData['iso'] = $this->language->get('iso');
+		$this->tplData['utf'] = $this->language->get('utf');
 	}
 
 	/**
@@ -187,8 +205,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _createButtons()
 	{
-		$this->data['button_save'] = $this->language->get('button_save');
-		$this->data['button_cancel'] = $this->language->get('button_cancel');
+		$this->tplData['button_save'] = $this->language->get('button_save');
+		$this->tplData['button_cancel'] = $this->language->get('button_cancel');
 	}
 
 	/**
@@ -197,23 +215,23 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	private function _createBreadcrumbs()
 	{
 
-		$this->data['breadcrumbs'] = array();
+		$this->tplData['breadcrumbs'] = array();
 
-		$this->data['breadcrumbs'][] = array(
+		$this->tplData['breadcrumbs'][] = array(
 			'text'		 => $this->language->get('text_home'),
-			'href'		 => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
+			'href'		 => $this->url->link('common/home', 'user_token=' . $this->session->data['user_token'], 'SSL'),
 			'separator'	 => false
 		);
 
-		$this->data['breadcrumbs'][] = array(
+		$this->tplData['breadcrumbs'][] = array(
 			'text'		 => $this->language->get('text_payment'),
-			'href'		 => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'),
+			'href'		 => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], 'SSL'),
 			'separator'	 => ' :: '
 		);
 
-		$this->data['breadcrumbs'][] = array(
+		$this->tplData['breadcrumbs'][] = array(
 			'text'		 => $this->language->get('heading_title'),
-			'href'		 => $this->url->link('extension/payment/pagseguro', 'token=' . $this->session->data['token'], 'SSL'),
+			'href'		 => $this->url->link('extension/payment/pagseguro', 'user_token=' . $this->session->data['user_token'], 'SSL'),
 			'separator'	 => ' :: '
 		);
 	}
@@ -223,8 +241,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _createLink()
 	{
-		$this->data['action'] = $this->url->link('extension/payment/pagseguro', 'token=' . $this->session->data['token'], 'SSL');
-		$this->data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+		$this->tplData['action'] = $this->url->link('extension/payment/pagseguro', 'user_token=' . $this->session->data['user_token'], 'SSL');
+		$this->tplData['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], 'SSL');
 	}
 
 	/**
@@ -234,21 +252,21 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	{
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$this->tplData['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$this->tplData['error_warning'] = '';
 		}
 
 		if (isset($this->error['email'])) {
-			$this->data['error_email'] = $this->error['email'];
+			$this->tplData['error_email'] = $this->error['email'];
 		} else {
-			$this->data['error_email'] = '';
+			$this->tplData['error_email'] = '';
 		}
 
 		if (isset($this->error['token'])) {
-			$this->data['error_token'] = $this->error['token'];
+			$this->tplData['error_token'] = $this->error['token'];
 		} else {
-			$this->data['error_token'] = '';
+			$this->tplData['error_token'] = '';
 		}
 	}
 
@@ -384,7 +402,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	{
 
 		if (empty($this->request->post['pagseguro_url_notification']))
-			$this->data['pagseguro_url_notification'] = $this->_generateNotificationUrl();
+			$this->tplData['pagseguro_url_notification'] = $this->_generateNotificationUrl();
 	}
 
 	/**
@@ -394,7 +412,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	{
 
 		if (empty($this->request->post['pagseguro_forwarding']))
-			$this->data['pagseguro_forwarding'] = $this->_generationRedirectUrl();
+			$this->tplData['pagseguro_forwarding'] = $this->_generationRedirectUrl();
 	}
 
 	/**
