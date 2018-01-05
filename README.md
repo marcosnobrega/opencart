@@ -13,7 +13,7 @@ Com o módulo instalado e configurado, você pode pode oferecer o PagSeguro como
 Requisitos
 ----------
 ---
- - [OpenCart] 1.5.5.1
+ - [OpenCart] 3.0.2.0
  - [PHP] 5.1.6+
  - [SPL]
  - [cURL]
@@ -27,18 +27,20 @@ Instalação
  - Baixe o repositório como arquivo zip ou faça um clone;
  - Copie as pastas *admin* e *catalog* para dentro de sua instalação OpenCart. Caso seja informado da sobrescrita de alguns arquivos, você pode confirmar o procedimento sem problemas. Esta instalação não afetará nenhum arquivo do seu sistema, somente adicionará os arquivos do módulo PagSeguro;
  - Certifique-se de que as permissões das pastas e arquivos recém copiados sejam, respectivamente, definidas como 755 e 644;
- - Na área administrativa do seu sistema, acesse o menu Extensions -> Payments -> PagSeguro -> Install.
+ - Na área administrativa do seu sistema, acesse o menu Extensions -> Extensions, selecione o tipo de extensão Payments, localize a extensão PagSeguro e clique em instalar.
 
 
 Configuração
 ------------
 ---
-Para acessar e configurar o módulo acesse o menu Extensions -> Payments -> PagSeguro -> Edit. As opções disponíveis estão descritas abaixo.
+Para acessar e configurar o módulo acesse o menu Extensions -> Extensions, selecione o tipo de extensão Payments, localize a extensão PagSeguro e clique em Edit. As opções disponíveis estão descritas abaixo.
 
  - **ativar módulo**: ativa/desativa o módulo.
  - **ordem de exibição**: define a ordem em que o PagSeguro vai aparecer no checkout de sua loja.
  - **e-mail**: e-mail cadastrado no PagSeguro.
  - **token**: token gerado no PagSeguro.
+ - **ambiente**: o ambiente de execução do pagseguro, se produção ou sandbox.
+ - **checkout**: o modo de checkout se padrão ou lightbox.
  - **url de redirecionamento**: ao final do fluxo de pagamento no PagSeguro, seu cliente será redirecionado automaticamente para a página de confirmação em sua loja ou então para a URL que você informar neste campo. Para ativar o redirecionamento ao final do pagamento é preciso ativar o serviço de [Pagamentos via API]. Obs.: Esta URL é informada automaticamente e você só deve alterá-la caso deseje que seus clientes sejam redirecionados para outro local.
  - **url de notificação**: sempre que uma transação mudar de status, o PagSeguro envia uma notificação para sua loja ou para a URL que você informar neste campo. Obs.: Esta URL é informada automaticamente e você só deve alterá-la caso deseje receber as notificações em outro local.
  - **charset**: codificação do seu sistema (ISO-8859-1 ou UTF-8).
