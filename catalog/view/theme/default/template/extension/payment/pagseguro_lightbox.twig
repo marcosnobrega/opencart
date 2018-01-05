@@ -6,43 +6,54 @@
         {% endfor %}
     </ul>
 
-    <!--  Payment Lightbox PagSeguro  -->
-    <!DOCTYPE html>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!--  Payment Lightbox PagSeguro  -->
+                <!DOCTYPE html>
 
-    {% if environment != 'production' %}
-        <script type="text/javascript"
-                src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
-        </script>
-    {% else %}
-        <script type="text/javascript"
-                src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
-        </script>
-    {% endif %}
+                {% if environment != 'production' %}
+                    <script type="text/javascript"
+                            src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
+                    </script>
+                {% else %}
+                    <script type="text/javascript"
+                            src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
+                    </script>
+                {% endif %}
 
-    <script type="text/javascript">
-        function checkout()
-        {
-            PagSeguroLightbox(
-                '{{ code }}',{
-                    success: function(){
-                        window.location = 'index.php?route=checkout/success';
-                    },
-                    abort: function(){
-                        window.location = 'index.php?route=extension/payment/pagseguro_error';
+                <script type="text/javascript">
+                    function checkout()
+                    {
+                        let isOpenLightBox = PagSeguroLightbox(
+                            '{{ code }}',{
+                                success: function(){
+                                    window.location = 'index.php?route=checkout/success';
+                                },
+                                abort: function(){
+                                    window.location = 'index.php?route=extension/payment/pagseguro_error';
+                                }
+                            });
+                        if (!isOpenLightBox) {
+                            window.location.href='https://pagseguro.uol.com.br/v2/checkout/payment.html?code={{ code }}'
+                        }
                     }
-                });
-        }
-    </script>
+                </script>
 
-    <h2>Finalizando sua compra com PagSeguro</h2>
+                <h2>Finalizando sua compra com PagSeguro</h2>
 
-    <div>Sua compra est&aacute; em processo de finaliza&ccedil;&atilde;o, aguarde um instante.
+                <div>
+                    <h3>Sua compra est&aacute; em processo de finaliza&ccedil;&atilde;o, aguarde um instante.</h3>
+                    <h3>Caso n&atilde;o abra a janela para finaliza&ccedil;&atilde;o do pagamento, <a href="https://pagseguro.uol.com.br/v2/checkout/payment.html?code={{ code }}" target="_blank">clique aqui para efetuar o pagamento de sua compra.</a></h3>
+                </div>
+                    <script type="text/javascript">
+                        checkout();
+                    </script>
+
+                <!--  Payment Lightbox PagSeguro  -->
+            </div>
+        </div>
     </div>
-        <script type="text/javascript">
-            checkout();
-        </script>
-
-    <!--  Payment Lightbox PagSeguro  -->
 
     {{ content_bottom }}</div>
 {{ footer }}
