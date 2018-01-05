@@ -26,6 +26,8 @@ class ControllerExtensionPaymentPagSeguroRedirect extends Controller
 
 	private $_urlPagSeguro;
 
+    private $tplData = array();
+
 	/**
 	 * The first method to be called by the redirect PagSeguro treatment.
 	 */
@@ -48,7 +50,7 @@ class ControllerExtensionPaymentPagSeguroRedirect extends Controller
                     'separator' => $this->language->get('text_separator')
                 );
 
-                $this->template = 'default/template/extension/payment/pagseguro_lightbox';
+                $this->template = 'extension/payment/pagseguro_lightbox';
     			$this->tplData['column_left'] = $this->load->controller('common/column_left');
     			$this->tplData['column_right'] = $this->load->controller('common/column_right');
     			$this->tplData['header'] = $this->load->controller('common/header');

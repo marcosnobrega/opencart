@@ -98,7 +98,7 @@
               {{ ps_checkout }}</label>
             <div class="col-sm-10">
               <select id="pagseguro_checkouts" name="payment_pagseguro_checkout" class="form-control">
-                {% if pagseguro_environment == 'lightbox' %}
+                {% if pagseguro_checkout == 'lightbox' %}
                   <option value="padrao">Padrão</option>
                   <option value="lightbox" selected>Lightbox</option>
                 {% else %}
