@@ -56,6 +56,8 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private $api_version = '1.0';
 
+	private $tplData = array();
+
 	/**
 	 * The first method to be called by the payment PagSeguro treatment.
 	 */

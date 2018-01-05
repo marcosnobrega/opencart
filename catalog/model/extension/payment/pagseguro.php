@@ -32,8 +32,8 @@ class ModelExtensionPaymentPagSeguro extends Model
 	 * @var array
 	 */
 	private static $array_languages = array(
-		"English"	 => "en",
-		"Portugues"	 => "br"
+		"English"	 => "en-gb",
+		"Portugues"	 => "pt-br"
 	);
 
 	/**
@@ -41,14 +41,14 @@ class ModelExtensionPaymentPagSeguro extends Model
 	 * @var array
 	 */
 	private static $array_order_status = array(
-		0 => array('br' => 'Iniciada', 'en' => 'Pending'),
-		1 => array('br' => 'Aguardando pagamento', 'en' => 'Awaiting payment'),
-		2 => array('br' => 'Em análise', 'en' => 'Processing'),
-		3 => array('br' => 'Paga', 'en' => 'Paid'),
-		4 => array('br' => 'Disponível', 'en' => 'Complete'),
-		5 => array('br' => 'Em disputa', 'en' => 'Dispute'),
-		6 => array('br' => 'Devolvida', 'en' => 'Refunded'),
-		7 => array('br' => 'Cancelada', 'en' => 'Canceled'));
+		0 => array('pt-br' => 'Iniciada', 'en-gb' => 'Pending'),
+		1 => array('pt-br' => 'Aguardando pagamento', 'en-gb' => 'Awaiting payment'),
+		2 => array('pt-br' => 'Em análise', 'en-gb' => 'Processing'),
+		3 => array('pt-br' => 'Paga', 'en-gb' => 'Paid'),
+		4 => array('pt-br' => 'Disponível', 'en-gb' => 'Complete'),
+		5 => array('pt-br' => 'Em disputa', 'en-gb' => 'Dispute'),
+		6 => array('pt-br' => 'Devolvida', 'en-gb' => 'Refunded'),
+		7 => array('pt-br' => 'Cancelada', 'en-gb' => 'Canceled'));
 
 	/**
 	 *
