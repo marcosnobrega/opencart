@@ -107,6 +107,31 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	private function _addPagSeguroLibrary()
 	{
 		include_once DIR_APPLICATION . 'controller/extension/payment/PagSeguroLibrary/PagSeguroLibrary.php';
+		PagSeguroConfig::activeLog($this->_getDirectoryLog());
+
+	}
+
+	/**
+	 * Return directory log
+	 */
+	private function _getDirectoryLog()
+	{
+		$_dir = str_replace('catalog/', '', DIR_APPLICATION);
+		return ($this->_isNotNull($this->config->get('payment_pagseguro_directory')) == TRUE) ? $_dir . $this->config->get('payment_pagseguro_directory') : null;
+	}
+
+	/**
+	 * Validate if value is not null
+	 * @param type $value
+	 * @return boolean
+	 */
+	private function _isNotNull($value)
+	{
+
+		if ($value != null && $value != "")
+			return TRUE;
+
+		return false;
 	}
 
 	/**
@@ -156,6 +181,7 @@ class ControllerExtensionPaymentPagSeguroNotification extends Controller
 	 */
 	private function _createTransaction()
 	{
+		PagSeguroConfig::setEnvironment($this->config->get('payment_pagseguro_environment'));
 		$this->obj_transaction = PagSeguroNotificationService::checkTransaction($this->obj_credentials, $this->notification_code);
 		$this->reference = $this->obj_transaction->getReference();
 	}

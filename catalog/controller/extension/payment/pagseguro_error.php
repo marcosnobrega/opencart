@@ -66,7 +66,7 @@ class ControllerExtensionPaymentPagSeguroError extends Controller{
         $canceled_payment = $array_language[$code_language];
 
         $id_order_status = $this->model_extension_payment_pagseguro->getOrderStatusByName($canceled_payment, $id_language);
-        $this->model_payment_pagseguro->updateOrder($this->_order_info['order_id'], $id_order_status);
+        $this->model_extension_payment_pagseguro->updateOrder($this->_order_info['order_id'], $id_order_status);
     }
 
     /**

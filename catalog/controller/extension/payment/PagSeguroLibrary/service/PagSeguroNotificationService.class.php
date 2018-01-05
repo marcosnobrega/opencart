@@ -48,7 +48,7 @@ class PagSeguroNotificationService
         $notificationCode
     ) {
         $url = $connectionData->getServiceUrl();
-        print_r("{$url}/{$notificationCode}/?" . $connectionData->getCredentialsUrlQuery());die();
+        //print_r("{$url}/{$notificationCode}/?" . $connectionData->getCredentialsUrlQuery());die();
         return "{$url}/{$notificationCode}/?" . $connectionData->getCredentialsUrlQuery();
     }
 
@@ -107,7 +107,6 @@ class PagSeguroNotificationService
             );
 
             self::$service = "CheckTransaction";
-            print_r();
             return self::getResult($connection, $notificationCode);
 
         } catch (PagSeguroServiceException $err) {
