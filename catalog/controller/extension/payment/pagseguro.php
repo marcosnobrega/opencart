@@ -252,9 +252,20 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 	 */
 	private function _generatePagSeguroShippingTypeObject()
 	{
+		$_shipping_type_string = 'NOT_SPECIFIED';
+
+		if (!empty($this->_order_info['shipping_code'])) {
+			$_shipping_code = $this->_order_info['shipping_code'];
+			$_shipping_code_pieces = explode(".", $_shipping_code);
+			if ($_shipping_code_pieces[1] == '04510') {
+				$_shipping_type_string = 'PAC';
+			} elseif ($_shipping_code_pieces[1] == '04014') {
+				$_shipping_type_string = 'SEDEX';
+			}
+		}
 
 		$shippingType = new PagSeguroShippingType();
-		$shippingType->setByType('NOT_SPECIFIED');
+		$shippingType->setByType($_shipping_type_string);
 		return $shippingType;
 	}
 
@@ -271,10 +282,12 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 			$_shipping_cost = explode(".", $_shipping_code);
 
 			if ($_shipping_cost['0'] != 'free') {
-				$_array_setting = $this->model_setting_setting->getSetting($_shipping_cost['0']);
+				$order_totals = $this->model_checkout_order->getOrderTotals($this->_order_info['order_id']);
 
-				if (isset($_array_setting[$_shipping_cost['0'] . "_cost"])) {
-					$_value = $_array_setting[$_shipping_cost['0'] . "_cost"];
+				foreach ($order_totals as $order_total) {
+					if ($order_total['code'] == 'shipping') {
+						$_value = $order_total['value'];
+					}
 				}
 			}
 		}
