@@ -322,7 +322,7 @@ class ControllerExtensionPaymentPagSeguro extends Controller
 		if (empty($this->request->post['payment_pagseguro_token']))
 			$this->error['token'] = $this->language->get('error_token_required');
 
-		if (strlen(trim($this->request->post['payment_pagseguro_token'])) != 32 && !(empty($this->request->post['payment_pagseguro_token'])))
+		if (strlen(trim($this->request->post['payment_pagseguro_token'])) != 100 && !(empty($this->request->post['payment_pagseguro_token'])))
 			$this->error['token'] = $this->language->get('error_token_invalid');
 	}
 
